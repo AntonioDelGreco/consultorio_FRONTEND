@@ -1,4 +1,4 @@
-export   const sectores = [
+export const sectores = [
   { to:'info', nombre:'Tratamientos' },
   { to:'sobre', nombre:'Sobre mi' }, 
   { to:'imagenes', nombre:'Imagenes' }, 
