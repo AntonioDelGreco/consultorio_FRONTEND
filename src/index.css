@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* GLOBALES */
+
 html{
   font-size: 62.5%;
 }
@@ -37,13 +39,18 @@ textarea, input:focus{
   background-image: linear-gradient(140deg, #3c4048 0%, #00abb3 50%, #b2b2b2 100%);
 }
 
+/* ICONOS */
+
 ion-icon {
   color: #00ABB3;
 }
 
+/* PARA QUE COLAPSE EL NAVBAR */
 .ReactCollapse--collapse {
   transition: height 500ms;
 }
+
+/* FORMA CURVEADA DE LA PAGINA HOME  */
 
 .curve::before{
   content: '';
@@ -68,6 +75,74 @@ ion-icon {
   z-index: -1;
 }
 
+/* FORMA PARA LOS BOTONES Y OTROS ELEMENTOS CURVEANDO DOS ESQUINAS */
+
 .border-dos-esquinas{
   border-radius: 25% 10%;
+}
+
+/* PARA QUE LA IMAGEN DE SOBRE MI SE MANTENGA REBOTANDO */
+
+.imagen-bounce{
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px); 
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* INPUTS DE PAGINA CONTACTO */
+
+.group {
+  position: relative;
+  margin: 4.5rem 0;
+}
+
+.group .form-input {
+  background: none;
+  background-color: #EAEAEA;
+  color:#B2B2B2;
+  font-size: 18px;
+  padding: 1rem 1rem 1rem 0.5rem;
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  border-bottom: 0.1rem solid #B2B2B2;
+  margin: 2.5rem 0;
+}
+
+.group .form-input:focus {
+  outline: none;
+}
+
+.group .form-input:focus ~ .form-input-label {
+  top: -1.4rem;
+  font-size: 1.2rem;
+  color: #000000;
+}
+
+.group .form-input-label {
+  color: #B2B2B2;
+  font-size: 1.6rem;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 0.5rem;
+  top: 1rem;
+  transition: 300ms ease all;
+}
+
+.group .form-input-label.shrink {
+  top: -1.4rem;
+  font-size: 1.2rem;
+  color:#000000;
 }

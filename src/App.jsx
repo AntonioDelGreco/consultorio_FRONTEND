@@ -3,9 +3,9 @@ import Home from "./components/Home";
 import Navbar from './components/Navbar';
 import Info from './components/info/Info';
 import Footer from './components/Footer';
-import Contacto from './components/Contacto';
+import Contacto from './components/contacto/Contacto';
 import About from './components/About';
-import Imagenes from './components/Imagenes';
+import Imagenes from './components/imagenes/Imagenes';
 import Turnos from './components/Turnos';
 
 const App = () => {
