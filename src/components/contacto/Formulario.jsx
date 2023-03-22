@@ -6,7 +6,7 @@ const Formulario = ({ handleInput, nombre, celular, consulta }) => {
       <InputForm 
         tipoInput='input'
         label='Nombre y Apellido:'
-        tipo="text"
+        type="text"
         name="nombre"
         value={nombre}
         onChange={handleInput}
@@ -14,7 +14,7 @@ const Formulario = ({ handleInput, nombre, celular, consulta }) => {
       <InputForm 
         tipoInput='input'
         label='Celular:'
-        tipo="tel"
+        type="tel"
         name="celular"
         value={celular}
         onChange={handleInput}

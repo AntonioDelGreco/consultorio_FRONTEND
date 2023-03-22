@@ -99,6 +99,48 @@ ion-icon {
   }
 }
 
+/* DISPLAY DE FOTOS EN PAGINA IMAGENS */
+
+.grid-container-imagenes{
+  padding: 4rem;
+  gap: 2rem;
+  display: grid;
+  grid-auto-rows: 15rem;
+}
+
+@media (min-width: 470px) {
+  .grid-container-imagenes{
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .grid-container-imagenes{
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .gallery:nth-child(3){
+    grid-column-start: span 2;
+  }
+  .gallery:nth-child(9){
+    grid-column-start: span 2;
+  }
+  .gallery:nth-child(1){
+    grid-column-start: span 2;
+  }
+  .gallery:nth-child(5){
+    grid-row-start: span 2;
+  }
+  .gallery:nth-child(4){
+    grid-row-start: span 2;
+  }
+}
+
+@media (min-width: 1000px) {
+  .grid-container-imagenes{
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 /* INPUTS DE PAGINA CONTACTO */
 
 .group {
@@ -106,7 +148,7 @@ ion-icon {
   margin: 4.5rem 0;
 }
 
-.group .form-input {
+.form-input {
   background: none;
   background-color: #EAEAEA;
   color:#B2B2B2;
@@ -120,17 +162,17 @@ ion-icon {
   margin: 2.5rem 0;
 }
 
-.group .form-input:focus {
+.form-input:focus {
   outline: none;
 }
 
-.group .form-input:focus ~ .form-input-label {
+.form-input:focus ~ .form-input-label {
   top: -1.4rem;
   font-size: 1.2rem;
   color: #000000;
 }
 
-.group .form-input-label {
+.form-input-label {
   color: #B2B2B2;
   font-size: 1.6rem;
   font-weight: normal;
@@ -141,7 +183,7 @@ ion-icon {
   transition: 300ms ease all;
 }
 
-.group .form-input-label.shrink {
+.form-input-label.shrink {
   top: -1.4rem;
   font-size: 1.2rem;
   color:#000000;
