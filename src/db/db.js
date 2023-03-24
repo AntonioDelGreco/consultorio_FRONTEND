@@ -1,11 +1,3 @@
-export const sectores = [
-  { to:'info', nombre:'Tratamientos' },
-  { to:'sobre', nombre:'Sobre mi' }, 
-  { to:'imagenes', nombre:'Imagenes' }, 
-  { to:'turnos', nombre:'Turnos online' },
-  { to:'contacto', nombre:'Contacto' },
-]
-
 export const informaciones = [
   {
     titulo:'Implantes dentales',

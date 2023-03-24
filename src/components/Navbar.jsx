@@ -1,10 +1,17 @@
 import { useState, useContext } from "react"
 import { Outlet, Link } from "react-router-dom"
 import { Collapse } from 'react-collapse';
-import { sectores } from "../db/db";
 import { TratamientoContext } from '../context/tratamientos.context'
 
 const Navbar = () => {
+
+  const sectores = [
+    { to:'info', nombre:'Tratamientos' },
+    { to:'sobre', nombre:'Sobre mi' }, 
+    { to:'imagenes', nombre:'Imagenes' }, 
+    { to:'turnos', nombre:'Turnos online' },
+    { to:'contacto', nombre:'Contacto' },
+  ]
 
   const { setCurrentTratamiento } = useContext(TratamientoContext);
   const [ menu, setMenu ] = useState(false);

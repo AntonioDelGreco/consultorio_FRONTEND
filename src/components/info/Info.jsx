@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import Detalles from "./Detalles";
+import { useContext, lazy } from "react";
+const Detalles = lazy(() => import('./Detalles'));
 import Tratamientos from "./Tratamientos";
 import { TratamientoContext } from "../../context/tratamientos.context";
 
