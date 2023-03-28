@@ -10,7 +10,7 @@ const Formulario = ({ handleInput, nombre, celular, consulta }) => {
         name="nombre"
         value={nombre}
         onChange={handleInput}
-        required/>
+        />
       <InputForm 
         tipoInput='input'
         label='Celular:'
@@ -20,7 +20,7 @@ const Formulario = ({ handleInput, nombre, celular, consulta }) => {
         onChange={handleInput}
         minLength={10} 
         maxLength={10}
-        required/>
+        />
       <InputForm 
         tipoInput='textarea'
         label='Consulta:'

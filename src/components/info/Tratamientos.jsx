@@ -19,7 +19,6 @@ const Tratamientos = () => {
           <section key={titulo} className="my-10 ">
             <Button 
               onClick={event => handleDescription(event)}
-              to='detallados'
               texto={<h3 className="text-center text-3xl font-bold ">{titulo}</h3>}
             />
           </section>

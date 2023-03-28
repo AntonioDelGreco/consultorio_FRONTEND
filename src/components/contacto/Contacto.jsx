@@ -7,6 +7,11 @@ const Alerta = lazy(() => import('../Alerta'))
 
 const Contacto = () => {
 
+  const defaultAlert = { 
+    msg:'', 
+    success:null, 
+    open:false 
+  }
   const defaultFormValues = {
     nombre: '',
     celular: '',
@@ -14,7 +19,7 @@ const Contacto = () => {
   }
 
   const alertaRef = useRef();
-  const [ alerta, setAlerta ] = useState({ msg:'', estado:null });
+  const [ alerta, setAlerta ] = useState(defaultAlert);
   const [ formValues, setFormValues ] = useState(defaultFormValues);
   const { nombre, celular, consulta } = formValues;
 
@@ -35,29 +40,29 @@ const Contacto = () => {
     event.preventDefault();
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/contacto`;
-      await axios.post(url, formValues)
-      if (!alerta.estado) {
-        setAlerta({
-          msg:'Su email se envio exitosamente.',
-          estado:false
-        })
-      }
+      await axios.post(url, formValues);
+      setAlerta({
+        msg:'Su email se envió exitosamente',
+        success:true,
+        open:true
+      })
     } catch (error) {
       setAlerta({
-        msg:error.response?.data?.message,
-        estado:error.response?.data?.error
+        msg:error.response.data.message,
+        success:false,
+        open:true
       })
     }
     resetValuesForm();
-    setTimeout(() => setAlerta({ msg:'', estado:null }), 3000);
+    setTimeout(() => setAlerta(defaultAlert), 3000);
   }
 
   useEffect(() => {
     alertaRef.current?.scrollIntoView({ behavior:'smooth' });
-  }, [alerta.msg])
+  }, [alerta])
 
   return (
-    <div className="contenedor py-10">
+    <main className="contenedor py-10">
       <h2 className="text-center font-bold text-4xl">Cualquier consulta por este medio</h2>
       <div className="flex flex-col items-center gap-8 mt-8 lg:flex-row lg:justify-around lg:items-center">
         <RedesContacto/>
@@ -68,7 +73,7 @@ const Contacto = () => {
         </form>
       </div>
       {!alerta.msg ? null : <Alerta alerta={alerta} alertaRef={alertaRef}/>}
-    </div>
+    </main>
   )
 }
 

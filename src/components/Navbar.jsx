@@ -7,8 +7,8 @@ const Navbar = () => {
 
   const sectores = [
     { to:'info', nombre:'Tratamientos' },
-    { to:'sobre', nombre:'Sobre mi' }, 
-    { to:'imagenes', nombre:'Imagenes' }, 
+    { to:'sobre', nombre:'Sobre Walter' }, 
+    { to:'imagenes', nombre:'Imágenes' }, 
     { to:'turnos', nombre:'Turnos online' },
     { to:'contacto', nombre:'Contacto' },
   ]
