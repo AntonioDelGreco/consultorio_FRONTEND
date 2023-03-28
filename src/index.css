@@ -188,3 +188,39 @@ ion-icon {
   font-size: 1.2rem;
   color:#000000;
 }
+
+/* ESTILOS AL CALENDARIO EN PAGINA TURNOS */
+.react-datepicker{
+  width: 100%;
+}
+
+.react-datepicker__month-container{
+  width: 100%;
+}
+
+.react-datepicker__current-month{
+  font-size: 1.6rem !important;
+}
+
+.react-datepicker__day-names{
+  max-width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.react-datepicker__day--selected{
+  padding: 0.5rem 1.2rem;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.react-datepicker__week{
+  max-width: 90%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
