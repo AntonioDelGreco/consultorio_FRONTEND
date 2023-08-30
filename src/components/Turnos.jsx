@@ -94,11 +94,9 @@ const Turnos = () => {
 
   return (
     <main className="contenedor py-10 overflow-x-hidden">
-      <form className='flex flex-col md:flex-row items-center gap-20' onSubmit={handleFormSubmit}>
-        <div className='md:w-1/3'>
-          <h2 className='border border-turqueza border-dos-esquinas p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
-        </div>
-        <div className='w-full md:w-1/2'>
+      <form className='flex flex-col md:flex-row items-center justify-between gap-20' onSubmit={handleFormSubmit}>
+        
+        <div className='w-full'>
           <InputForm
             tipoInput='input'
             label='Nombre y Apellido:'
@@ -139,8 +137,9 @@ const Turnos = () => {
             { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
           </Collapse>
         </div>
-        <div className='md:w-1/3'>
-          <Button tipo={'submit'} texto={'Solicitar turno'}/>
+        <div className='flex flex-col gap-10 md:gap-20'>
+            <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
+            <Button tipo={'submit'} texto={'Solicitar turno'}/>
         </div>
       </form>
       { alerta.open ? <Alerta alerta={alerta} alertaRef={alertaRef}/> : null }
