@@ -39,7 +39,6 @@ const Contacto = () => {
   const handleFormSubmit = async event => {
     event.preventDefault();
     try {
-      console.log(`URL Backend: ${import.meta.env.VITE_BACKEND_URL}`);
       const url = `${import.meta.env.VITE_BACKEND_URL}/contacto`;
       await axios.post(url, formValues, {
         headers:{

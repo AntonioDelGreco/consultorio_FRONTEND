@@ -67,7 +67,6 @@ const Turnos = () => {
   const handleFormSubmit = async event => {
     event.preventDefault();
     try {
-      console.log(`URL Backend: ${import.meta.env.VITE_BACKEND_URL}`);
       const url = `${import.meta.env.VITE_BACKEND_URL}/turnos`;
       await axios.post(url, formValues, {
         headers:{
