@@ -39,8 +39,14 @@ const Contacto = () => {
   const handleFormSubmit = async event => {
     event.preventDefault();
     try {
+      console.log(`URL Backend: ${import.meta.env.VITE_BACKEND_URL}`);
       const url = `${import.meta.env.VITE_BACKEND_URL}/contacto`;
-      await axios.post(url, formValues);
+      await axios.post(url, formValues, {
+        headers:{
+          'Access-Control-Allow-Origin': import.meta.env.DOMINIO_FRONT,
+          'Content-Type': 'application/json',
+        }
+      });
       setAlerta({
         msg:'Su email se envió exitosamente',
         success:true,

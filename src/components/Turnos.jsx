@@ -67,8 +67,14 @@ const Turnos = () => {
   const handleFormSubmit = async event => {
     event.preventDefault();
     try {
+      console.log(`URL Backend: ${import.meta.env.VITE_BACKEND_URL}`);
       const url = `${import.meta.env.VITE_BACKEND_URL}/turnos`;
-      await axios.post(url, formValues);
+      await axios.post(url, formValues, {
+        headers:{
+          'Access-Control-Allow-Origin': import.meta.env.DOMINIO_FRONT,
+          'Content-Type': 'application/json',
+        }
+      });
       setAlerta({
         msg:'Su turno se registró correctamente, le escribiremos por celular a la brevedad.',
         success:true,
