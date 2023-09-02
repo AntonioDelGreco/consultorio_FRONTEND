@@ -99,7 +99,7 @@ const Turnos = () => {
 
   return (
     <main className="contenedor py-10 overflow-x-hidden">
-      <form name="turnos" method="POST" data-netlify="true" className='flex flex-col md:flex-row items-center justify-between gap-20' onSubmit={handleFormSubmit}>
+      <form name="turnos" method="POST" netlify className='flex flex-col md:flex-row items-center justify-between gap-20' onSubmit={handleFormSubmit}>
         
         <div className='w-full'>
           <InputForm
