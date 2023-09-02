@@ -199,10 +199,11 @@ ion-icon {
 }
 
 .react-datepicker__current-month{
-  font-size: 1.6rem !important;
+  font-size: 2rem !important;
 }
 
 .react-datepicker__day-names{
+  font-size: 2rem;
   max-width: 90%;
   margin: 0 auto;
   display: flex;
@@ -218,6 +219,7 @@ ion-icon {
 }
 
 .react-datepicker__week{
+  font-size: 2.2rem;
   max-width: 90%;
   margin: 0 auto;
   display: flex;

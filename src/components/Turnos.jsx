@@ -133,16 +133,16 @@ const Turnos = () => {
             filterDate={filterDate}
             selected={fecha}
           />
-          <Collapse isOpened={true}>
-            { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
-          </Collapse>
+            <Collapse isOpened={true}>
+              { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
+            </Collapse>
         </div>
         <div className='flex flex-col gap-10 md:gap-20'>
             <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
             <Button tipo={'submit'} texto={'Solicitar turno'}/>
+            { alerta.open ? <Alerta alerta={alerta} alertaRef={alertaRef}/> : null }
         </div>
       </form>
-      { alerta.open ? <Alerta alerta={alerta} alertaRef={alertaRef}/> : null }
     </main>
   );
 }
