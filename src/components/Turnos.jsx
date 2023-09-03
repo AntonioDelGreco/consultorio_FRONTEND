@@ -1,16 +1,19 @@
 import { useState, useRef, useEffect, lazy } from 'react';
 import { Collapse } from 'react-collapse';
 import { es } from 'date-fns/locale';
-import axios from 'axios'
 import DatePicker from 'react-datepicker';
 import InputForm from './contacto/InputForm';
+import emailJs from '@emailjs/browser';
 import Button from './Button';
 const Alerta = lazy(() => import('./Alerta'));
 import 'react-datepicker/dist/react-datepicker.css';
+import { addTurno, getAllTurnos } from '../data/dataToFirestore';
 
 const Turnos = () => {
 
   //VARIABLES
+  const validacionNombre = /^([A-Za-z]{1}[a-zñáéíóú]+[\s]*)+$/g;
+  const validacionNumero = /^\d{10}$/g;
   const defaultAlert = { 
     msg:'', 
     success:null, 
@@ -24,14 +27,27 @@ const Turnos = () => {
     horario:''
   }
 
+  // CALL API
+  const [ fechasOcupadas, setFechasOcupadas ] = useState([]);
+  async function dataTurnos(){
+    const responseTurnos = await getAllTurnos();
+    setFechasOcupadas(responseTurnos);
+  }
+  useEffect(() => {
+    dataTurnos();
+  }, []);
+  const excludeDays = fechasOcupadas.map( momento => new Date(momento.turnoDate.seconds * 1000))
+
   // HOOKS
   const [ formValues, setFormValues ] = useState(defaultFormTurno);
   const { nombre, celular, obraSocial, fecha, horario } = formValues;
+  const [ alerta, setAlerta ] = useState(defaultAlert); 
+  const [ errMsgNombre, setErrMsgNombre ] = useState('');
+  const [ errMsgCel, setErrMsgCel ] = useState('');
   const alertaRef = useRef();
   const horarioRef = useRef();
-  const [ alerta, setAlerta ] = useState(defaultAlert); 
   
-  //LOGICA
+  //LOGICA del almanaque y el borrado de formulario
   const filterDate = date => date.getDay() === 2 || date.getDay() === 4;
   const resetValuesForm = () => {
     setFormValues(defaultFormTurno);    
@@ -42,6 +58,10 @@ const Turnos = () => {
     if(event instanceof Date){
       let hora;
       const valor = event;
+      const fechaObj = new Date(valor);
+      const dia = fechaObj.getUTCDate();
+      const mes = fechaObj.getUTCMonth() + 1;
+      const anio = fechaObj.getUTCFullYear();
       if (valor.getDay() === 2) {
         hora = '16:30';
       } else {
@@ -50,7 +70,10 @@ const Turnos = () => {
       
       setFormValues({
         ...formValues,
-        fecha:valor,
+        fecha: valor,
+        dia,
+        mes,
+        anio,
         horario:hora
       })
     } else{
@@ -59,21 +82,43 @@ const Turnos = () => {
         ...formValues,
         [name]:value
       })
-      
     }
+  }
+
+  //VALIDACIONES
+  const handleMouseValidation = () => {
+      if (!nombre.match(validacionNombre)) {
+        setErrMsgNombre('El nombre no es válido. No puede contener simbolos.')
+      } else{
+        setErrMsgNombre('');
+      };
+      if (!celular.match(validacionNumero)) {
+        setErrMsgCel('El celular no es válido. Debe contener 10 numeros y ninguna letra.')
+      } else{
+        setErrMsgCel('');
+      };
   }
 
   //ENVIO DEL EMAIL
   const handleFormSubmit = async event => {
     event.preventDefault();
+    if (!nombre || !celular || !fecha) {
+      setAlerta({
+        msg:'Valores incompletos.',
+        success:false,
+        open:true
+      })
+      setTimeout(() => setAlerta(defaultAlert), 3000);
+      return;
+    }
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/turnos`;
-      await axios.post(url, formValues, {
-        headers:{
-          'Access-Control-Allow-Origin': import.meta.env.DOMINIO_FRONT,
-          'Content-Type': 'application/json',
-        }
-      });
+      const serviceGmailID = import.meta.env.VITE_GMAIL_ID;
+      const templateId = import.meta.env.VITE_TEMPLATE_ID;
+      const apiKey = import.meta.env.VITE_APIKEY_EMAILJS;
+      const response = await emailJs.send(serviceGmailID, templateId, formValues, apiKey);
+      if (response.text.includes("OK")) await addTurno(formValues.fecha);
+      resetValuesForm();
+      dataTurnos();
       setAlerta({
         msg:'Su turno se registró correctamente, le escribiremos por celular a la brevedad.',
         success:true,
@@ -81,15 +126,14 @@ const Turnos = () => {
       })
     } catch (error) {
       setAlerta({
-        msg:error.response.data.message,
-        success:false,
+        msg: "Hubo un problema en el envio, intente mas tarde porfavor.",
+        success: false,
         open:true
       })
     }
-    resetValuesForm();
     setTimeout(() => setAlerta(defaultAlert), 3000);
   }
-  
+
   useEffect(() => {
     alertaRef.current?.scrollIntoView({ behavior:'smooth' });
   }, [alerta])
@@ -99,12 +143,14 @@ const Turnos = () => {
 
   return (
     <main className="contenedor py-10 overflow-x-hidden">
-      <form name="turnos" netlify className='flex flex-col md:flex-row items-center justify-between gap-20' /* onSubmit={handleFormSubmit} */>
+      <form className='flex flex-col md:flex-row items-center justify-between gap-20' onSubmit={handleFormSubmit}>
         
         <div className='w-full'>
           <InputForm
             tipoInput='input'
             label='Nombre y Apellido:'
+            mouseValidation={handleMouseValidation}
+            errMsg={errMsgNombre}
             type="text"
             name="nombre"
             value={nombre}
@@ -113,6 +159,8 @@ const Turnos = () => {
           <InputForm
             tipoInput='input'
             label='Celular'
+            mouseValidation={handleMouseValidation}
+            errMsg={errMsgCel}
             type="tel"
             name="celular"
             value={celular}
@@ -137,15 +185,16 @@ const Turnos = () => {
             onChange={handleInputTurnos}
             filterDate={filterDate}
             selected={fecha}
+            excludeDates={excludeDays}
           />
-{/*             <Collapse isOpened={true}>
-              { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
-            </Collapse> */}
         </div>
         <div className='flex flex-col gap-10 md:gap-20'>
-            <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
-            <Button tipo={'submit'} texto={'Solicitar turno'}/>
-            {/* { alerta.open ? <Alerta alerta={alerta} alertaRef={alertaRef}/> : null } */}
+          <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
+          <Button tipo={'submit'} texto={'Solicitar turno'}/>
+          <Collapse isOpened={true}>
+            { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
+          </Collapse>
+          { alerta.open ? <Alerta alerta={alerta} alertaRef={alertaRef}/> : null }
         </div>
       </form>
     </main>

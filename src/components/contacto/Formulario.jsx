@@ -1,11 +1,13 @@
 import InputForm from "./InputForm"
 
-const Formulario = ({ handleInput, nombre, celular, consulta }) => {
+const Formulario = ({ mouseValidation, errMsg, handleInput, nombre, celular, consulta }) => {
   return (
-    <div className="md:flex md:gap-10 md:items-center md:justify-center">
+    <div>
       <InputForm 
         tipoInput='input'
         label='Nombre y Apellido:'
+        mouseValidation={mouseValidation}
+        errMsg={errMsg.errMsgNombre}
         type="text"
         name="nombre"
         value={nombre}
@@ -14,6 +16,8 @@ const Formulario = ({ handleInput, nombre, celular, consulta }) => {
       <InputForm 
         tipoInput='input'
         label='Celular:'
+        mouseValidation={mouseValidation}
+        errMsg={errMsg.errMsgCel}
         type="tel"
         name="celular"
         value={celular}
