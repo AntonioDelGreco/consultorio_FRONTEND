@@ -1,7 +1,8 @@
-import { useRef, useState, useEffect, lazy } from "react"
-import RedesContacto from "./RedesContacto"
-import Formulario from "./Formulario"
-import Button from "../Button"
+import { useRef, useState, useEffect, lazy } from "react";
+import RedesContacto from "./RedesContacto";
+import Formulario from "./Formulario";
+import Button from "../Button";
+import emailJs from '@emailjs/browser';
 const Alerta = lazy(() => import('../Alerta'))
 
 const Contacto = () => {
