@@ -26,9 +26,20 @@ const Turnos = () => {
     fecha:'',
     horario:''
   }
+  
+  // HOOKS
+  const [ fechasOcupadas, setFechasOcupadas ] = useState([]);
+  const [ formValues, setFormValues ] = useState(defaultFormTurno);
+  const { nombre, celular, obraSocial, fecha, horario } = formValues;
+  const [ alerta, setAlerta ] = useState(defaultAlert); 
+  const [ errMsgNombre, setErrMsgNombre ] = useState('');
+  const [ errMsgCel, setErrMsgCel ] = useState('');
+  const [ deshabilitado, setDeshabilitado ] = useState(true);
+  const [ desacuerdoDatos, setDesacuerdoDatos ] = useState(true);
+  const alertaRef = useRef();
+  const horarioRef = useRef();
 
   // CALL API
-  const [ fechasOcupadas, setFechasOcupadas ] = useState([]);
   async function dataTurnos(){
     getAllTurnos().then( responseTurnos => setFechasOcupadas(responseTurnos)).catch(err => console.log(err));
   }
@@ -36,18 +47,23 @@ const Turnos = () => {
     dataTurnos();
   }, []);
   const excludeDays = fechasOcupadas.map( momento => new Date(momento.turnoDate.seconds * 1000))
-
-  // HOOKS
-  const [ formValues, setFormValues ] = useState(defaultFormTurno);
-  const { nombre, celular, obraSocial, fecha, horario } = formValues;
-  const [ alerta, setAlerta ] = useState(defaultAlert); 
-  const [ errMsgNombre, setErrMsgNombre ] = useState('');
-  const [ errMsgCel, setErrMsgCel ] = useState('');
-  const alertaRef = useRef();
-  const horarioRef = useRef();
   
   //LOGICA del almanaque y el borrado de formulario
-  const filterDate = date => date.getDay() === 2 || date.getDay() === 4;
+  const filterDate = date => {
+    const fechaActual = new Date();
+    const diaActual = fechaActual.getDate();
+    const mesActual = fechaActual.getMonth();
+    const anioActual = fechaActual.getFullYear();
+    const martesJueves = date.getDay() === 2 || date.getDay() === 4;
+    return (
+      martesJueves &&
+      (
+        date.getFullYear() > anioActual ||
+        (date.getFullYear() === anioActual && date.getMonth() >= mesActual) ||
+        (date.getFullYear() === anioActual && date.getMonth() === mesActual && date.getDate() >= diaActual)
+      )
+    );
+  }
   const resetValuesForm = () => {
     setFormValues(defaultFormTurno);    
   }
@@ -85,31 +101,33 @@ const Turnos = () => {
   }
 
   //VALIDACIONES
-  const handleMouseValidation = () => {
-      if (!nombre.match(validacionNombre)) {
-        setErrMsgNombre('El nombre no es válido. No puede contener simbolos.')
+  useEffect(() => {
+      let validacionExitosaNombre;
+      let validacionExitosaCel;
+
+      if (!nombre.match(validacionNombre) || nombre.trim() === '') {
+        setErrMsgNombre('El nombre no es válido. No puede contener simbolos. No puede quedar un espacio vacio');
+        validacionExitosaNombre = false;
       } else{
+        validacionExitosaNombre = true;
         setErrMsgNombre('');
       };
-      if (!celular.match(validacionNumero)) {
-        setErrMsgCel('El celular no es válido. Debe contener 10 numeros y ninguna letra.')
+      if (!celular.match(validacionNumero) || !celular) {
+        setErrMsgCel('El celular no es válido. Debe contener 10 numeros y ninguna letra. No puede quedar un espacio en blanco.');
+        validacionExitosaCel = false;
       } else{
         setErrMsgCel('');
+        validacionExitosaCel = true;
       };
-  }
+      setDeshabilitado(!validacionExitosaNombre || !validacionExitosaCel || !fecha || desacuerdoDatos);
+  }, [nombre, celular, fecha, desacuerdoDatos])
+
+   //LOGICA PARA EL CHECKBOX DE TURNOS
+   const handleCheckboxChange = () => setDesacuerdoDatos(!desacuerdoDatos);
 
   //ENVIO DEL EMAIL
   const handleFormSubmit = async event => {
     event.preventDefault();
-    if (!nombre || !celular || !fecha) {
-      setAlerta({
-        msg:'Valores incompletos.',
-        success:false,
-        open:true
-      })
-      setTimeout(() => setAlerta(defaultAlert), 3000);
-      return;
-    }
     try {
       const serviceGmailID = import.meta.env.VITE_GMAIL_ID;
       const templateId = import.meta.env.VITE_TEMPLATE_ID;
@@ -133,6 +151,7 @@ const Turnos = () => {
     setTimeout(() => setAlerta(defaultAlert), 3000);
   }
 
+  //SCROLL HACIA LOS MENSAJES DE ALERTA Y HORARIO
   useEffect(() => {
     alertaRef.current?.scrollIntoView({ behavior:'smooth' });
   }, [alerta])
@@ -148,7 +167,6 @@ const Turnos = () => {
           <InputForm
             tipoInput='input'
             label='Nombre y Apellido:'
-            mouseValidation={handleMouseValidation}
             errMsg={errMsgNombre}
             type="text"
             name="nombre"
@@ -158,7 +176,6 @@ const Turnos = () => {
           <InputForm
             tipoInput='input'
             label='Celular'
-            mouseValidation={handleMouseValidation}
             errMsg={errMsgCel}
             type="tel"
             name="celular"
@@ -187,9 +204,13 @@ const Turnos = () => {
             excludeDates={excludeDays}
           />
         </div>
-        <div className='flex flex-col gap-10 md:gap-20'>
+        <div className='flex flex-col items-center gap-10 md:gap-20'>
           <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
-          <Button tipo={'submit'} texto={'Solicitar turno'}/>
+          <label className='text-center'>
+            <input type="checkbox" onChange={handleCheckboxChange} />
+            Estoy de acuerdo con que se utilicen mis datos para hacer efectuar la solicitud del turno.
+          </label>
+          <Button deshabilitado={deshabilitado} tipo={'submit'} texto={'Solicitar turno'}/>
           <Collapse isOpened={true}>
             { horario && <p ref={horarioRef} className='mb-16'>Su horario sera: <span className='font-bold text-3xl'>{horario}hs</span>. Existen dos horarios, uno para cada dia. De lo contrario comunicarse por WhatsApp.</p> }
           </Collapse>

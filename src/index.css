@@ -141,7 +141,7 @@ ion-icon {
   }
 }
 
-/* INPUTS DE PAGINA CONTACTO */
+/* INPUTS DE PAGINA TURNOS */
 
 .group {
   position: relative;
@@ -229,4 +229,12 @@ ion-icon {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* ESTILOS A ICONOS DE CONTACTO */
+.linkMode{
+  color: rgb(81, 81, 255);
+  font-weight: lighter;
+  font-style: italic;
+  text-decoration: underline;
 }
