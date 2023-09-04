@@ -30,8 +30,7 @@ const Turnos = () => {
   // CALL API
   const [ fechasOcupadas, setFechasOcupadas ] = useState([]);
   async function dataTurnos(){
-    const responseTurnos = await getAllTurnos();
-    setFechasOcupadas(responseTurnos);
+    getAllTurnos().then( responseTurnos => setFechasOcupadas(responseTurnos)).catch(err => console.log(err));
   }
   useEffect(() => {
     dataTurnos();
