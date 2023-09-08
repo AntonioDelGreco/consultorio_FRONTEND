@@ -205,10 +205,13 @@ const Turnos = () => {
           />
         </div>
         <div className='flex flex-col items-center gap-10 md:gap-20'>
-          <h2 className='p-5 text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
-          <label className='text-center'>
+          <h2 className='p-5 text-4xl text-center font-bold'>Importante: la reserva de turnos online es solo para primera consulta, por tratamientos mandar un mensaje de WhatsApp. Si no dispone de obra social, dejela en blanco.</h2>
+          <label className='text-center conjunto flex items-center gap-5'>
             <input type="checkbox" onChange={handleCheckboxChange} />
-            Estoy de acuerdo con que se utilicen mis datos para hacer efectuar la solicitud del turno.
+            <svg viewBox="0 0 64 64" height="2em" width="2em">
+              <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+            </svg>
+            <span>Estoy de acuerdo con que se utilicen mis datos para hacer efectuar la solicitud del turno.</span>
           </label>
           <Button deshabilitado={deshabilitado} tipo={'submit'} texto={'Solicitar turno'}/>
           <Collapse isOpened={true}>
