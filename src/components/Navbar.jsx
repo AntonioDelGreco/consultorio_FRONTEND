@@ -37,7 +37,7 @@ const Navbar = () => {
   return (
     <>
       <header className="grid grid-cols-2 lg:flex lg:justify-between lg:items-center bg-turqueza text-blanco p-8">
-          <Link onClick={event => reset(event)} className="max-lg:m-auto text-7xl btnUnderline" to='/'><h1 className="p-5 uppercase font-bold">red</h1></Link> 
+          <Link onClick={event => reset(event)} className="max-lg:m-auto text-7xl btnUnderline" to='/'><h1 className="p-5 uppercase font-bold text-blanco">red</h1></Link> 
           <button type="button" className="lg:hidden m-auto relative" onClick={() => setMenu(!menu)}>
             { menu ? 
              <ion-icon size="large" name="close"></ion-icon> 

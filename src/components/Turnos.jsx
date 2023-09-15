@@ -168,6 +168,7 @@ const Turnos = () => {
             tipoInput='input'
             label='Nombre y Apellido:'
             errMsg={errMsgNombre}
+            autofocus={"autofocus"}
             type="text"
             name="nombre"
             value={nombre}
